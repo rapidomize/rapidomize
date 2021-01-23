@@ -1,2 +1,2 @@
-# ics
-Rapidomize Platform
+# Rapidomize ICS Platform
+
