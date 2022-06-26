@@ -1,4 +1,4 @@
-# Rapidomize ICS Platform
+# ICS
 
 https://rapidomize.com/
 
