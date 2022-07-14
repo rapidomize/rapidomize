@@ -1,4 +1,4 @@
-# ICS
+# iConnect
 
 https://rapidomize.com/
 
