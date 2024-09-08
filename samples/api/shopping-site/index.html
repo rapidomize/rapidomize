@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+  font-family: sans-serif;
+  color: #101010;
+  background-color: #ffffff;
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 40%;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+  padding: 2px 16px;
+}
+
+.center {
+  margin: auto;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+  padding: 10px;
+  gap: 10px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 0.5px solid rgba(211, 211, 211, 0.8);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  max-width: 200px;
+}
+
+h3{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; 
+}
+
+img{
+  max-width: 100%;
+  height: auto;
+}
+
+.checked {
+  color: orange;
+}
+
+.pl-10{
+  padding-left: 10px;
+}
+
+.hig{
+  height: 240px;
+}
+
+.hero_area {
+  padding: 0 45px;
+}
+
+.hero_area.sub_pages {
+  height: auto;
+}
+
+.hero_area .title_container {
+  color: #fefefe;
+  background-color: #000000;
+  background-color: #45c5db;
+  padding: 25px;
+  border-radius: 0 0 15px 15px;
+}
+
+.hero_area .title_container h1 {
+  font-weight: bold;
+  font-size: 3.5rem;
+  margin-bottom: 10px;
+}
+
+.hero_area .title_container a {
+  display: inline-block;
+  padding: 10px 40px;
+  background-color: #2a77eb;
+  color: #ffffff;
+  border: 1px solid #2a77eb;
+  border-radius: 5px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  margin-top: 25px;
+  text-transform: uppercase;
+}
+
+.hero_area .title_container a:hover {
+  background-color: transparent;
+  color: #2a77eb;
+}
+
+</style>
+</head>
+<body>
+<div class="hero_area">
+  <div class="title_container">
+      <h1>
+        Welcome To *Everything* Shop
+      </h1>
+      <p style="margin-top: 20px;">
+        As the proud owner of the Vereenigde Oost-Indische Compagnie, a legendary institution that dates back to 1602
+      </p>
+      <a href="#buy" onclick="scrollToAnchor()">
+        Buy Now!
+      </a>
+  </div>
+</div>
+<div style="width: 100%;">
+  <h2 style="margin: 20px auto; width: fit-content;">
+    Latest Products
+  </h2>
+</div>
+<div id="container" class="grid-container">
+</div>
+</div>
+
+<script>
+function httpGet(theUrl){
+    // get list of items from icapp
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    // check errors
+    xmlHttp.onerror = () => {
+        console.log("onerr")
+        alert("Failed to load items.")
+    };
+    xmlHttp.onabort = () => {
+        console.log("onabort")
+        alert("Failed to load items.")
+    };
+    xmlHttp.onload = () => {
+        console.log("onload")
+        if(xmlHttp.status != 200) alert("Failed to load items.")
+    };
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+
+function list_items(){
+  var table = httpGet("https://rapidomize.com/api/v1/agw/<ICAPP_ID>/<URI>?token=<TOKEN>");
+  var json = JSON.parse(table)
+
+  // show list of items as cards
+  for (let i = 0; i < json.length; i++) {
+    const newDiv = document.createElement("div");
+    newDiv.setAttribute("class", "grid-item")
+    const div = document.createElement("div");
+    div.setAttribute("class", "hig")
+    const img = document.createElement("img");
+    img.setAttribute("src", json[i].img);
+    div.appendChild(img);
+    newDiv.appendChild(div);
+    const h3 = document.createElement("h3");
+    h3.appendChild(document.createTextNode(json[i].name))
+    h3.setAttribute("class", "center")
+    newDiv.appendChild(h3)
+    const desc = document.createElement("div");
+    desc.appendChild(document.createTextNode(json[i].description))
+    desc.setAttribute("class", "center")
+    for(let j=0;j<5;j++){
+      let span = document.createElement("span");
+      let cls = "fa fa-star";
+      if(j<json[i].rating) cls += " checked";
+      span.setAttribute("class", cls)
+      newDiv.appendChild(span)
+    }
+    const soldrate = document.createElement("span");
+    soldrate.appendChild(document.createTextNode(json[i].sold+" sold"))
+    soldrate.setAttribute("class", "pl-10 center")
+    newDiv.appendChild(soldrate);
+    newDiv.appendChild(desc);
+    document.getElementById("container").appendChild(newDiv);
+  }
+}
+
+list_items()
+</script>
+</body>
+</html>
+
+
